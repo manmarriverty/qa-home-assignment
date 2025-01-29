@@ -1,51 +1,70 @@
 using System;
 using System.Net.Http.Json;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics;  // For Debug.WriteLine
 using Reqnroll;
 using Xunit;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace CardValidation.Core
 {
     [Binding]
     public class Feature1StepDefinitions
     {
-        private HttpClient client;
+        private readonly HttpClient client;
         private object requestBody;
-        private HttpResponseMessage response;
+        private dynamic response;
 
-        public Feature1StepDefinitions() => client = new HttpClient();
+
+        public Feature1StepDefinitions()
+        {
+          
+            client = new HttpClient();
+        }
 
         [Fact]
         [Given("the user provides with following details")]
-        public void GivenTheUserProvidesWithFollowingDetails()
+        public async Task GivenTheUserProvidesWithFollowingDetails()
         {
-            var requestBody = new
+            requestBody = new
             {
+
                 Owner = "John Doe",
-                Number = "4111111111110",  // Invalid card number
-                Date = "01/2020",  // Expired card
+                Number = "4111111111111111", // Valid card number for testing
+                Date = "12/2025",  // Correct expiry date format
                 Cvv = "123"
+
             };
+
+            using (var client = new HttpClient())
+            {
+                var jsonBody = JsonConvert.SerializeObject(requestBody);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync("https://localhost:7135/cardvalidation/card/credit/validate", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Assert.True(response.IsSuccessStatusCode, "hello");
+            }
+            
+
         }
+
         [Fact]
         [When("the user submit card details to API")]
-        public void WhenTheUserSubmitCardDetailsToAPI()
+        public async Task WhenTheUserSubmitCardDetailsToAPI()
         {
+          
 
-            var response = client.PostAsync("https://localhost:7135/swagger/index.html/CardValidation/card/credit/validate",
-                JsonContent.Create(requestBody));
         }
+
         [Fact]
         [Then("the response is Visa")]
-        public void ThenTheResponseIsVisa()
+        public async Task ThenTheResponseIsVisa()
         {
-            if (response == null)
-            {
-                throw new Exception("Response is null.");
-            }
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
-            {
-                throw new Exception($"Expected status code 200, but got {response.StatusCode}");
-            }
+           
+
         }
     }
 }
