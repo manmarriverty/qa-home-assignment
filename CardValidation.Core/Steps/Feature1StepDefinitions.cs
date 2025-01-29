@@ -1,8 +1,3 @@
-using System;
-using System.Net.Http.Json;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Diagnostics;  // For Debug.WriteLine
 using Reqnroll;
 using Xunit;
 using Newtonsoft.Json;
@@ -20,50 +15,46 @@ namespace CardValidation.Core
 
         public Feature1StepDefinitions()
         {
-          
+
             client = new HttpClient();
         }
 
-        [Fact]
+       
         [Given("the user provides with following details")]
-        public async Task GivenTheUserProvidesWithFollowingDetails()
+        public void GivenTheUserProvidesWithFollowingDetails()
         {
             requestBody = new
             {
 
                 Owner = "John Doe",
-                Number = "4111111111111111", // Valid card number for testing
-                Date = "12/2025",  // Correct expiry date format
+                Number = "4111111111111111",
+                Date = "12/2025",
                 Cvv = "123"
 
             };
+        }
+
+    
+        [When("the user submit card details to API")]
+        public async Task WhenTheUserSubmitCardDetailsToAPI()
+        {
 
             using (var client = new HttpClient())
             {
                 var jsonBody = JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync("https://localhost:7135/cardvalidation/card/credit/validate", content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                Assert.True(response.IsSuccessStatusCode, "hello");
+                response = await client.PostAsync("https://localhost:7135/cardvalidation/card/credit/validate", content);
             }
-            
-
         }
-
-        [Fact]
-        [When("the user submit card details to API")]
-        public async Task WhenTheUserSubmitCardDetailsToAPI()
-        {
-          
-
-        }
-
-        [Fact]
+        
         [Then("the response is Visa")]
         public async Task ThenTheResponseIsVisa()
         {
-           
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.True(response.IsSuccessStatusCode, "Request failed with status code: " + response.StatusCode);
+
+            Assert.True(responseContent.Contains("10"), "Response content doesn't contain the expected string.");
 
         }
     }

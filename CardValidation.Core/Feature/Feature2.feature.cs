@@ -19,21 +19,21 @@ namespace CardValidation.Core.Feature
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class Feature1Feature : object, Xunit.IClassFixture<Feature1Feature.FixtureData>, Xunit.IAsyncLifetime
+    public partial class Feature2Feature : object, Xunit.IClassFixture<Feature2Feature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Feature", "Feature1", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Feature", "Feature2", "A short summary of the feature", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Feature1.feature"
+#line 1 "Feature2.feature"
 #line hidden
         
-        public Feature1Feature(Feature1Feature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public Feature2Feature(Feature2Feature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -92,17 +92,17 @@ namespace CardValidation.Core.Feature
             await this.TestTearDownAsync();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Validate the Visa card")]
-        [Xunit.TraitAttribute("FeatureTitle", "Feature1")]
-        [Xunit.TraitAttribute("Description", "Validate the Visa card")]
+        [Xunit.SkippableFactAttribute(DisplayName="Validate Owner field")]
+        [Xunit.TraitAttribute("FeatureTitle", "Feature2")]
+        [Xunit.TraitAttribute("Description", "Validate Owner field")]
         [Xunit.TraitAttribute("Category", "tag1")]
-        public async System.Threading.Tasks.Task ValidateTheVisaCard()
+        public async System.Threading.Tasks.Task ValidateOwnerField()
         {
             string[] tagsOfScenario = new string[] {
                     "tag1"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate the Visa card", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 5
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Owner field", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -112,14 +112,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
- await testRunner.GivenAsync("the user provides with following details", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
 #line 7
- await testRunner.WhenAsync("the user submit card details to API", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.GivenAsync("the user provide card with missing field", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 8
- await testRunner.ThenAsync("the response is Visa", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.WhenAsync("the user submit the card detail to API", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 9
+ await testRunner.ThenAsync("the response shows Owner is required", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -132,12 +132,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await Feature1Feature.FeatureSetupAsync();
+                await Feature2Feature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.Task Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await Feature1Feature.FeatureTearDownAsync();
+                await Feature2Feature.FeatureTearDownAsync();
             }
         }
     }
