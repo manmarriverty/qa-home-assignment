@@ -8,6 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:7.0
+      ports:
+        - 5135
+        - 7135
+      volumes:
+        - my_docker_volume:/volume_mount
+      options: --cpus 1
 
     steps:
       - name: Checkout code
@@ -16,22 +24,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker Image
-        run: docker build --no-cache -f ./DockerFile -t card-validation-tests .
-
       - name: Run Unit Tests
         run: |
-          docker run --rm card-validation-tests dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
+          dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
 
-      - name: Start API Server in Container
+      - name: Start API Server
         run: |
-          docker run -d  -p 5135:5135 -p 7135:7135 --name api-server --network=host card-validation-tests
+          dotnet run /app/CardValidation.Web
           sleep 15 
-          docker ps -a
 
       - name: Run Integration Tests
         run: |
-          docker run --network=host --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
+          dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
 
       - name: Upload Test Report
         if: always()
@@ -39,6 +43,3 @@ jobs:
         with:
             name: dotnet-test-results
             path: dotnet-test-results
-
-      - name: Stop and Remove API Server
-        run: docker stop api-server && docker rm api-server
