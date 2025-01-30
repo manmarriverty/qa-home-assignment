@@ -28,7 +28,7 @@ jobs:
                 docker run -d -p 5135:5135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls http://0.0.0.0:5135
 
                 # Wait for the API server to be available on port 5135
-                docker run --rm jwilder/dockerize -wait http://localhost:5135 -timeout 300s
+                docker run --rm frankmussi/docker-wait -t 300 http://localhost:5135
           
                 # Verify if server is accessible after waiting
                 echo "API server is up and running!"
