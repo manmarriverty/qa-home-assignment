@@ -28,7 +28,7 @@ jobs:
       - name: Start API server 
         run: |
               docker run -d --name card-validation-api -p 7135:7135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj
-              docker run --rm jwilder/dockerize -wait tcp://localhost:7135 -timeout 60s
+              docker run --rm jwilder/dockerize -wait https://localhost:7135 -timeout 60s
 
       - name: Run integration tests
         run: docker run --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
