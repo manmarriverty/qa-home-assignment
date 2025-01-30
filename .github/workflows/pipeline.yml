@@ -21,25 +21,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Restore Dependencies
+        run: dotnet restore CardValidation.sln
+
+      - name: Build Solution
+        run: dotnet build CardValidation.sln --configuration Release --no-restore
+
       - name: Run Unit Tests
         run: |
-          ls -a
-          dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
+          dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj \
+            --configuration Release \
+            --no-build \
+            --logger "trx;LogFileName=unit_tests.trx"
 
-      - name: Start API Server
+      - name: Start API Server in Background
         run: |
           cd CardValidation.Web
-          ls
-          dotnet run
-          sleep 15 
+          # Start API on the desired port and run in the background
+          nohup dotnet run --no-build \
+                           --configuration Release \
+                           --urls "http://0.0.0.0:7135" \
+                           > /dev/null 2>&1 &
+          # Sleep briefly to allow the server to come up. Adjust as needed.
+          sleep 10
 
       - name: Run Integration Tests
         run: |
-          dotnet test ./CardValidation.Core/CardValidation.Core.csproj --logger:trx
+          # Make sure these tests point to the running server at http://localhost:7135
+          dotnet test ./CardValidation.IntegrationTests/CardValidation.IntegrationTests.csproj \
+            --configuration Release \
+            --no-build \
+            --logger "trx;LogFileName=integration_tests.trx"
 
-      - name: Upload Test Report
+      # (Optional) Kill the background server if desired
+      - name: Stop API Server
+        run: |
+          pkill dotnet || true
+
+      - name: Upload Test Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: dotnet-test-results
-            path: dotnet-test-results
+          name: dotnet-test-results
+          path: | 
+              **/.trx
