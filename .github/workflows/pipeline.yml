@@ -19,25 +19,19 @@ jobs:
       - name: Build Docker image
         run: docker build --no-cache -f ./DockerFile -t card-validation-tests .
 
-      - name: Debug Docker 
-        run: docker run --rm card-validation-tests ls -R /app
-
       - name: Run unit tests
         run: docker run --rm card-validation-tests dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
 
       - name: Start API server 
         run: |
                # Run the API server container in detached mode
-                docker run -d --name card-validation-api -p 5135:5135 card-validation-api dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls http://0.0.0.0:5135
-          
-                 # Check the logs to ensure it is running properly
-               docker logs card-validation-api
+                docker run -d -p 5135:5135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls http://0.0.0.0:5135
 
                 # Wait for the API server to be available on port 5135
                docker run --rm jwilder/dockerize -wait tcp://localhost:5135 -timeout 120s
           
                 # Verify if server is accessible after waiting
-                echo "API server is up and running!"
+                echo "API server is up and running!""
 
       - name: Run integration tests
         run: docker run --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
