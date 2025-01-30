@@ -47,7 +47,6 @@ jobs:
 
       - name: Run Integration Tests
         run: |
-          ps aux
           # Make sure these tests point to the running server at http://localhost:7135
           dotnet test ./CardValidation.Core/CardValidation.Core.csproj \
             --configuration Release \
