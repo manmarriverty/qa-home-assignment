@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -16,23 +16,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image
+      - name: Build Docker Image
         run: docker build --no-cache -f ./DockerFile -t card-validation-tests .
 
-      - name: Run unit tests
-        run: docker run -d --network=host card-validation-tests --command "dotnet test CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx"
-
-      - name: Start API server 
+      - name: Run Unit Tests
         run: |
-           docker run -d --name api-server --network=host card-validation-tests
-            sleep 15
-            docker ps -a
+          docker run --rm card-validation-tests dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
 
-            echo "API server is up and running!"
+      - name: Start API Server in Container
+        run: |
+          docker run -d --name api-server --network=host card-validation-tests
+          sleep 15  # Give the server time to start
+          docker ps -a
 
-
-      - name: Run integration tests
-        run:  docker run --network=host -d card-validation-tests --command "dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx"
+      - name: Run Integration Tests
+        run: |
+          docker run --network=host --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
@@ -40,5 +39,5 @@ jobs:
           name: test results
           path: ./test-*.xml
 
-
-
+      - name: Stop and Remove API Server
+        run: docker stop api-server && docker rm api-server
