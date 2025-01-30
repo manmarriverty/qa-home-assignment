@@ -19,11 +19,17 @@ jobs:
       - name: Build Docker image
         run: docker build --no-cache -f ./DockerFile -t card-validation-tests .
 
+      - name: Debug Docker 
+        run: docker run --rm card-validation-tests ls -R /app
+
       - name: Run unit tests
-        run: docker run --rm card-validation-tests
+        run: docker run --rm card-validation-tests dotnet test CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger trx
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
         with:
           name: test results
           path: ./test-*.xml
+
+
+

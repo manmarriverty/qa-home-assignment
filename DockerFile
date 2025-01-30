@@ -16,4 +16,4 @@ RUN dotnet build
 
 RUN dotnet test --logger:trx
 
-CMD ["dotnet", "test", " --logger", "trx"]
+CMD ["dotnet", "test", "CardValidation.CoreTests/CardValidation.CoreTests.csproj", " --logger", "trx", ]
