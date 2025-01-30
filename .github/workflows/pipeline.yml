@@ -22,8 +22,11 @@ jobs:
       - name: Debug Docker 
         run: docker run --rm card-validation-tests ls -R /app
 
+      - name: Debug Working Directory and Files
+        run: docker run --rm card-validation-tests /bin/sh -c "pwd && ls -R && cat /app/CardValidation.sln"
+
       - name: Run unit tests
-        run: docker run --rm card-validation-tests dotnet test CardValidation.CoreTests/Services/CardValidationServiceTests.cs --logger trx
+        run: docker run --rm card-validation-tests dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger trx
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
