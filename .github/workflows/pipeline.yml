@@ -25,14 +25,14 @@ jobs:
       - name: Start API server 
         run: |
                # Run the API server container in detached mode
-                docker run -d -p 5135:5135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls http://0.0.0.0:5135
+                docker run -d -p 8080:5135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls http://0.0.0.0:8080
 
                 # Wait for the API server to be available on port 5135
-                docker run --rm frankmussi/docker-wait -t 300 http://localhost:5135
+                docker run --rm jwilder/dockerize -wait http://localhost:8080 -timeout 300s
           
                 # Verify if server is accessible after waiting
                 echo "API server is up and running!"
-                curl http://localhost:5135
+
 
       - name: Run integration tests
         run: docker run --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
