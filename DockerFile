@@ -14,4 +14,4 @@ WORKDIR /app
 
 RUN dotnet build
 
-CMD ["dotnet", "run", "--project", "CardValidation.Web/CardValidation.Web.csproj", "--urls", "http://0.0.0.0:5135"]
+CMD ["dotnet", "run", "--project", "CardValidation.Web/CardValidation.Web.csproj", "--urls", "https://0.0.0.0:7135"]

@@ -25,7 +25,7 @@ jobs:
 
       - name: Start API Server in Container
         run: |
-          docker run -d --name api-server --network=host card-validation-tests
+          docker run -d  -p 5135:5135 -p 7135:7135 --name api-server --network=host card-validation-tests
           sleep 15  # Give the server time to start
           docker ps -a
 
