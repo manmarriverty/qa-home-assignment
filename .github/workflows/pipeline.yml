@@ -24,18 +24,18 @@ jobs:
 
       - name: Start API server 
         run: |
-               # Run the API server container in detached mode
-                docker run -d -p 8080:5135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls http://0.0.0.0:8080
+           # Run the API server container in detached mode
+            docker run -d --network=host -p 8080:5135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls http://0.0.0.0:8080
 
-                # Wait for the API server to be available on port 5135
-                docker run --rm jwilder/dockerize -wait http://localhost:8080 -timeout 300s
-          
-                # Verify if server is accessible after waiting
-                echo "API server is up and running!"
+            # Wait for the API server to be available on port 5135
+            docker run --network=host --rm jwilder/dockerize -wait http://localhost:8080 -timeout 300s
+      
+            # Verify if server is accessible after waiting
+            echo "API server is up and running!"
 
 
       - name: Run integration tests
-        run: docker run --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
+        run: docker run --network=host --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
