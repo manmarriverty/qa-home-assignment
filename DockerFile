@@ -2,15 +2,17 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0
 
 WORKDIR /app
 
-COPY CardValidation.CoreTests/CardValidation.CoreTests.csproj ./CardValidation.CoreTests/
-COPY CardValidation.Core/CardValidation.Core.csproj ./CardValidation.Core/
-COPY CardValidation.Web/CardValidation.Web.csproj ./CardValidation.Web/
+COPY CardValidation.CoreTests/CardValidation.CoreTests.csproj CardValidation.CoreTests/
+COPY CardValidation.Core/CardValidation.Core.csproj CardValidation.Core/
+COPY CardValidation.Web/CardValidation.Web.csproj CardValidation.Web/
 
-RUN dotnet restore 
+WORKDIR /app
+
+RUN dotnet restore CardValidation.CoreTests/CardValidation.CoreTests.csproj
 
 COPY . .
 
-WORKDIR /app./CardValidation.CoreTests/
+WORKDIR /app/CardValidation.CoreTests/
 
 RUN dotnet build 
 
