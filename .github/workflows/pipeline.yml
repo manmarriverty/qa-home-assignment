@@ -23,16 +23,17 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
+          ls -a
+          dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
 
       - name: Start API Server
         run: |
-          dotnet run /app/CardValidation.Web
+          dotnet run ./CardValidation.Web
           sleep 15 
 
       - name: Run Integration Tests
         run: |
-          dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
+          dotnet test ./CardValidation.Core/CardValidation.Core.csproj --logger:trx
 
       - name: Upload Test Report
         if: always()
