@@ -19,11 +19,11 @@ jobs:
       - name: Build Docker image
         run: docker build --no-cache -f ./DockerFile -t card-validation-tests .
 
-      - name: Debug Docker 
-        run: docker run --rm card-validation-tests ls -R /app
+     # - name: Debug Docker 
+     #    run: docker run --rm card-validation-tests ls -R /app
 
-      - name: Debug Working Directory and Files
-        run: docker run --rm card-validation-tests /bin/sh -c "pwd && ls -R && cat /app/CardValidation.sln"
+     #  - name: Debug Working Directory and Files
+     #    run: docker run --rm card-validation-tests /bin/sh -c "pwd && ls -R && cat /app/CardValidation.sln"
 
       - name: Run unit tests
         run: docker run --rm card-validation-tests dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger trx
