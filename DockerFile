@@ -2,13 +2,14 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0
 
 WORKDIR /app
 
+COPY CardValidation.sln ./
 COPY CardValidation.CoreTests/CardValidation.CoreTests.csproj CardValidation.CoreTests/
 COPY CardValidation.Core/CardValidation.Core.csproj CardValidation.Core/
 COPY CardValidation.Web/CardValidation.Web.csproj CardValidation.Web/
 
 COPY . .
 
-RUN dotnet restore CardValidation.CoreTests/CardValidation.CoreTests.csproj
+RUN dotnet restore CardValidation.sln
 
 WORKDIR /app/CardValidation.CoreTests/
 
