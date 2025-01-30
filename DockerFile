@@ -1,16 +1,19 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
+FROM mcr.microsoft.com/dotnet/sdk:7.0
+
+WORKDIR /app
 
 COPY CardValidation.CoreTests/CardValidation.CoreTests.csproj ./CardValidation.CoreTests/
+COPY CardValidation.Core/CardValidation.Core.csproj ./CardValidation.Core/
+COPY CardValidation.Web/CardValidation.Web.csproj ./CardValidation.Web/
 
-RUN dotnet restore CardValidation.CoreTests/CardValidation.CoreTests.csproj
+RUN dotnet restore 
 
 COPY . .
 
-WORKDIR /src/CardValidation.CoreTests
+WORKDIR /app./CardValidation.CoreTests/
 
-RUN dotnet build CardValidation.CoreTests.csproj
+RUN dotnet build 
 
 RUN dotnet test --logger:trx
 
-CMD ["dotnet", "test", "CardValidation.CoreTests.csproj"]
+CMD ["dotnet", "test", "CardValidation.CoreTests/CardValidation.CoreTests.csproj"]
