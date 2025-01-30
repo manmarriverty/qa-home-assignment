@@ -12,9 +12,7 @@ COPY . ./
 
 WORKDIR /app
 
-RUN dotnet build 
+RUN dotnet build
 
-RUN dotnet test --logger:trx
-
-CMD ["dotnet", "test", "CardValidation.CoreTests/CardValidation.CoreTests.csproj", " --logger", "trx", ]
-CMD ["dotnet", "test", "CardValidation.Core/CardValidation.Core.csproj", " --logger", "trx", ]
+CMD dotnet test CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger trx && \
+    dotnet test CardValidation.Core/CardValidation.Core.csproj --logger trx
