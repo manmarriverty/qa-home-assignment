@@ -10,10 +10,11 @@ RUN dotnet restore CardValidation.sln --verbosity detailed
 
 COPY . ./
 
-WORKDIR /app/CardValidation.CoreTests/
+WORKDIR /app
 
 RUN dotnet build 
 
 RUN dotnet test --logger:trx
 
 CMD ["dotnet", "test", "CardValidation.CoreTests/CardValidation.CoreTests.csproj", " --logger", "trx", ]
+CMD ["dotnet", "test", "CardValidation.Core/CardValidation.Core.csproj", " --logger", "trx", ]
