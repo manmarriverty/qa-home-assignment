@@ -17,7 +17,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Build Docker image
-        run: docker build --no-cache -f ./Dockerfile -t card-validation-tests .
+        run: docker build --no-cache -f ./DockerFile -t card-validation-tests .
 
       - name: Run unit tests
         run: docker run --rm card-validation-tests
