@@ -23,13 +23,13 @@ jobs:
         run: docker run --rm card-validation-tests ls -R /app
 
       - name: Run unit tests
-        run: docker run --rm card-validation-tests dotnet test /app/CardValidation.dotnet rundotCoreTests/CardValidation.CoreTests.csproj --logger:trx
+        run: docker run --rm card-validation-tests dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
 
       - name: Start API server and wait for it to be ready
         run: |
-          docker run -d --name card-validation-api -p 7135:7135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj
-      
-          docker run --rm wait-for-it wait-for-it localhost:7135 --timeout=60
+              docker run -d --name card-validation-api -p 7135:7135 card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj
+              docker run --rm wait-for-it wait-for-it localhost:7135 --timeout=60
+
 
       - name: Run integration tests
         run: docker run --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
