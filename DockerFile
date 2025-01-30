@@ -6,11 +6,9 @@ COPY CardValidation.CoreTests/CardValidation.CoreTests.csproj CardValidation.Cor
 COPY CardValidation.Core/CardValidation.Core.csproj CardValidation.Core/
 COPY CardValidation.Web/CardValidation.Web.csproj CardValidation.Web/
 
-WORKDIR /app
+COPY . .
 
 RUN dotnet restore CardValidation.CoreTests/CardValidation.CoreTests.csproj
-
-COPY . .
 
 WORKDIR /app/CardValidation.CoreTests/
 
