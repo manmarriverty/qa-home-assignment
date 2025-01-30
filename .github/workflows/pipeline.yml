@@ -28,7 +28,7 @@ jobs:
 
       - name: Start API Server
         run: |
-          dotnet run ./CardValidation.Web
+          dotnet run
           sleep 15 
 
       - name: Run Integration Tests
