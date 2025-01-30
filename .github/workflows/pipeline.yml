@@ -20,21 +20,19 @@ jobs:
         run: docker build --no-cache -f ./DockerFile -t card-validation-tests .
 
       - name: Run unit tests
-        run: docker run --rm card-validation-tests dotnet test /app/CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx
+        run: docker run -d --network=host card-validation-tests --command "dotnet test CardValidation.CoreTests/CardValidation.CoreTests.csproj --logger:trx"
 
       - name: Start API server 
         run: |
-           # Run the API server container in detached mode
-            docker run -d --network=host card-validation-tests dotnet run --project /app/CardValidation.Web/CardValidation.Web.csproj --urls https://0.0.0.0:7135
+           docker run -d --name api-server --network=host card-validation-tests
             sleep 15
             docker ps -a
-      
-            # Verify if server is accessible after waiting
+
             echo "API server is up and running!"
 
 
       - name: Run integration tests
-        run: docker run --network=host --rm card-validation-tests dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx
+        run:  docker run --network=host -d card-validation-tests --command "dotnet test /app/CardValidation.Core/CardValidation.Core.csproj --logger:trx"
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
