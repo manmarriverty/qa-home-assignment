@@ -55,7 +55,7 @@ jobs:
         if: always()
         run: |
           dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.2
-          export PATH="$PATH:/root/.dotnet/tools" # Ensure the tool is available immediately
+          export PATH="$PATH:/github/home/.dotnet/tools" # Add the path to the tools directory
           reportgenerator \
             -reports:results/*.trx \
             -targetdir:results/report \
