@@ -54,7 +54,7 @@ jobs:
       - name: Convert TRX to HTML with ReportGenerator
         if: always()
         run: |
-          dotnet tool install --global dotnet-reportgenerator-globaltool
+          dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.2
           reportgenerator \
             -reports:results/*.trx \
             -targetdir:results/report \
