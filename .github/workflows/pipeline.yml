@@ -36,9 +36,8 @@ jobs:
             --configuration Release \
             --no-build \
             --logger "trx;LogFileName=unit_tests.trx"
-            find . -name "*.trx" # Find .trx files anywhere in the directory
-            mv $(find . -name "unit_tests.trx") results/ # Move the file if found
-            ls -al
+            find . -name "*.trx" 
+            mv $(find . -name "unit_tests.trx") results/ 
 
       - name: Start API Server in Background
         run: |
@@ -56,7 +55,8 @@ jobs:
             --configuration Release \
             --no-build \
             --logger "trx;LogFileName=integration_tests.trx"
-            mv *.trx results/
+            find . -name "*.trx" 
+            mv $(find . -name "integration_tests.trx") results/ 
           
 
       - name: Convert TRX to HTML with ReportGenerator
@@ -67,7 +67,7 @@ jobs:
             export PATH="$PATH:/github/home/.dotnet/tools" 
             
             reportgenerator \
-            -reports:results/unit_tests.trx \
+            -reports:results/*.trx \
             -targetdir:results/report \
             -reporttypes:Html
 
