@@ -60,11 +60,12 @@ jobs:
       - name: Convert TRX to HTML with ReportGenerator
         if: always()
         run: |
+            ls -a results  
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.2
             export PATH="$PATH:/github/home/.dotnet/tools" 
-            ls -a results  
+            
             reportgenerator \
-            -reports:results/**/*.trx \
+            -reports:results/unit_tests.trx \
             -targetdir:results/report \
             -reporttypes:Html
 
