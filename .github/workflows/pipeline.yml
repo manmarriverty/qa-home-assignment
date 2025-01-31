@@ -37,26 +37,24 @@ jobs:
       - name: Start API Server in Background
         run: |
           cd CardValidation.Web
-          # Start API on the desired port and run in the background
           nohup dotnet run --no-build \
                            --configuration Release \
                            --urls "http://0.0.0.0:7135" \
                            > /dev/null 2>&1 &
-          # Sleep briefly to allow the server to come up. Adjust as needed.
           sleep 10
 
       - name: Run Integration Tests
         run: |
-          # Make sure these tests point to the running server at http://localhost:7135
           dotnet test ./CardValidation.Core/CardValidation.Core.csproj \
             --configuration Release \
             --no-build \
             --logger "trx;LogFileName=integration_tests.trx"
 
-      # (Optional) Kill the background server if desired
-      - name: Stop API Server
+      - name: Convert TRX to HTML
         run: |
-          pkill dotnet || true
+          dotnet tool install --global trx2html
+          trx2html unit_tests.trx -o UnitTestResults.html
+          trx2html integration_tests.trx -o IntegrationTestResults.html
 
       - name: Upload Test Reports
         if: always()
@@ -65,3 +63,4 @@ jobs:
           name: dotnet-test-results
           path: | 
               **/.trx
+              **/*.html
