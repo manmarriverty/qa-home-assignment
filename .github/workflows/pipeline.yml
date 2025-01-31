@@ -36,7 +36,9 @@ jobs:
             --configuration Release \
             --no-build \
             --logger "trx;LogFileName=unit_tests.trx"
-            mv *.trx results/
+            ls -a results  
+             ls -al
+            mv unit_tests.trx results/
 
       - name: Start API Server in Background
         run: |
