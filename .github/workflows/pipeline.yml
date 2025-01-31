@@ -13,9 +13,6 @@ jobs:
       ports:
         - 5135
         - 7135
-      volumes:
-        - my_docker_volume:/volume_mount
-      options: --cpus 1
 
     steps:
       - name: Checkout code
@@ -32,18 +29,14 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj \
-            --configuration Release \
-            --no-build \
-            --logger "trx;LogFileName=unit_tests.trx"
+          dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj --configuration Release --no-build --logger "trx;LogFileName=unit_tests.trx"
             find . -name "*.trx" 
             mv $(find . -name "unit_tests.trx") results/ 
 
       - name: Start API Server in Background
         run: |
           cd CardValidation.Web
-          nohup dotnet run --no-build \
-                           --configuration Release \
+          nohup dotnet run --no-build --configuration Release \
                            --urls "http://0.0.0.0:7135" \
                            > /dev/null 2>&1 &
           sleep 10
@@ -51,10 +44,7 @@ jobs:
       - name: Run Integration Tests
         continue-on-error: true
         run: |
-          dotnet test ./CardValidation.Core/CardValidation.Core.csproj \
-            --configuration Release \
-            --no-build \
-            --logger "trx;LogFileName=integration_tests.trx"
+          dotnet test ./CardValidation.Core/CardValidation.Core.csproj  --configuration Release  --no-build  --logger "trx;LogFileName=integration_tests.trx"
             find . -name "*.trx" 
             mv $(find . -name "integration_tests.trx") results/ 
           
