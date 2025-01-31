@@ -27,6 +27,9 @@ jobs:
       - name: Build Solution
         run: dotnet build CardValidation.sln --configuration Release --no-restore
 
+      - name: Create results directory
+        run: mkdir -p results
+
       - name: Run Unit Tests
         run: |
           dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj \
@@ -54,10 +57,10 @@ jobs:
       - name: Convert TRX to HTML with ReportGenerator
         if: always()
         run: |
-          dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.2
-          export PATH="$PATH:/github/home/.dotnet/tools" 
-           ls -al results
-          reportgenerator \
+            ls -al results  
+            dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.2
+            export PATH="$PATH:/github/home/.dotnet/tools" 
+            reportgenerator \
             -reports:results/*.trx \
             -targetdir:results/report \
             -reporttypes:Html
