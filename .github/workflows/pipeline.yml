@@ -36,7 +36,6 @@ jobs:
             --configuration Release \
             --no-build \
             --logger "trx;LogFileName=unit_tests.trx"
-              --verbosity detailed # Adding detailed verbosity
             ls -al # List all files in the current directory to verify the .trx file exists
              mv ./unit_tests.trx results/ # Move the file to results directory
 
