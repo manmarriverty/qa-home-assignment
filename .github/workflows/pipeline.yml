@@ -1,0 +1,71 @@
+name: .Net workflow test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:7.0
+      ports:
+        - 5135
+        - 7135
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Restore Dependencies
+        run: dotnet restore CardValidation.sln
+
+      - name: Build Solution
+        run: dotnet build CardValidation.sln --configuration Release --no-restore
+
+      - name: Create results directory
+        run: mkdir -p results
+
+      - name: Run Unit Tests
+        run: |
+          dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj --configuration Release --no-build --logger "trx;LogFileName=unit_tests.trx"
+            find . -name "*.trx" 
+            mv $(find . -name "unit_tests.trx") results/ 
+
+      - name: Start API Server in Background
+        run: |
+          cd CardValidation.Web
+          nohup dotnet run --no-build --configuration Release \
+                           --urls "http://0.0.0.0:7135" \
+                           > /dev/null 2>&1 &
+          sleep 10
+
+      - name: Run Integration Tests
+        continue-on-error: true
+        run: |
+          dotnet test ./CardValidation.Core/CardValidation.Core.csproj  --configuration Release  --no-build  --logger "trx;LogFileName=integration_tests.trx"
+            find . -name "*.trx" 
+            mv $(find . -name "integration_tests.trx") results/ 
+          
+
+      - name: Convert TRX to HTML with ReportGenerator
+        if: always()
+        run: |
+            ls -a results  
+            dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.2
+            export PATH="$PATH:/github/home/.dotnet/tools" 
+            
+            reportgenerator \
+            -reports:results/*.trx \
+            -targetdir:results/report \
+            -reporttypes:Html
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-results
+          path: | 
+              results/*.trx
+              results/report/**/*.html
