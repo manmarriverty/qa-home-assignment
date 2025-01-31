@@ -35,7 +35,8 @@ jobs:
           dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj \
             --configuration Release \
             --no-build \
-            --logger "trx;LogFileName=results/unit_tests.trx"
+            --logger "trx;LogFileName=unit_tests.trx"
+            mv *.trx results/
 
       - name: Start API Server in Background
         run: |
@@ -47,21 +48,23 @@ jobs:
           sleep 10
 
       - name: Run Integration Tests
+        continue-on-error: true
         run: |
           dotnet test ./CardValidation.Core/CardValidation.Core.csproj \
             --configuration Release \
             --no-build \
-            --logger "trx;LogFileName=results/integration_tests.trx"
-          continue-on-error: true
+            --logger "trx;LogFileName=integration_tests.trx"
+            mv *.trx results/
+          
 
       - name: Convert TRX to HTML with ReportGenerator
         if: always()
         run: |
-            ls -al results  
             dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.2
             export PATH="$PATH:/github/home/.dotnet/tools" 
+            ls -a results  
             reportgenerator \
-            -reports:results/*.trx \
+            -reports:results/**/*.trx \
             -targetdir:results/report \
             -reporttypes:Html
 
