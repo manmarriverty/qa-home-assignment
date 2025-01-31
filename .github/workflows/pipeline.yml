@@ -36,9 +36,9 @@ jobs:
             --configuration Release \
             --no-build \
             --logger "trx;LogFileName=unit_tests.trx"
-            ls -a results  
-             ls -al
-            mv unit_tests.trx results/
+              --verbosity detailed # Adding detailed verbosity
+            ls -al # List all files in the current directory to verify the .trx file exists
+             mv ./unit_tests.trx results/ # Move the file to results directory
 
       - name: Start API Server in Background
         run: |
