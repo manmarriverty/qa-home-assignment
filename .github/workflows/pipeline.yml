@@ -51,12 +51,16 @@ jobs:
             --logger "trx;LogFileName=results/integration_tests.trx"
           continue-on-error: true
 
-      - name: Convert TRX to HTML
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Convert TRX to HTML with ReportGenerator
         if: always()
         run: |
-          dotnet tool install --global trx2html
-          trx2html results/unit_tests.trx -o results/UnitTestResults.html; fi
-          trx2html results/integration_tests.trx -o results/IntegrationTestResults.html; fi
+          reportgenerator \
+            -reports:results/*.trx \
+            -targetdir:results/report \
+            -reporttypes:Html
 
       - name: Upload Test Reports
         if: always()
@@ -65,4 +69,4 @@ jobs:
           name: dotnet-test-results
           path: | 
               results/*.trx
-              results/*.html
+              results/report/**/*.html
