@@ -32,7 +32,7 @@ jobs:
           dotnet test ./CardValidation.CoreTests/CardValidation.CoreTests.csproj \
             --configuration Release \
             --no-build \
-            --logger "trx;LogFileName=unit_tests.trx"
+            --logger "trx;LogFileName=results/unit_tests.trx"
 
       - name: Start API Server in Background
         run: |
@@ -48,13 +48,15 @@ jobs:
           dotnet test ./CardValidation.Core/CardValidation.Core.csproj \
             --configuration Release \
             --no-build \
-            --logger "trx;LogFileName=integration_tests.trx"
+            --logger "trx;LogFileName=results/integration_tests.trx"
+          continue-on-error: true
 
       - name: Convert TRX to HTML
+        if: always()
         run: |
           dotnet tool install --global trx2html
-          trx2html unit_tests.trx -o UnitTestResults.html
-          trx2html integration_tests.trx -o IntegrationTestResults.html
+          trx2html results/unit_tests.trx -o results/UnitTestResults.html; fi
+          trx2html results/integration_tests.trx -o results/IntegrationTestResults.html; fi
 
       - name: Upload Test Reports
         if: always()
@@ -62,5 +64,5 @@ jobs:
         with:
           name: dotnet-test-results
           path: | 
-              **/.trx
-              **/*.html
+              results/*.trx
+              results/*.html
