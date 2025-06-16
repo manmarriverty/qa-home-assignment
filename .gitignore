@@ -398,3 +398,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Allure Report generated files
+allure-report/
+allure-results/
+
+#macOS
+.DS_Store
