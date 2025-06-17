@@ -1,34 +1,67 @@
-# Home Assignment
+# Credit Card Validation API - QA Automation Assignment
 
-You will be required to write unit tests and automated tests for a payment application to demonstrate your skills. 
+This project is a QA automation test suite built to verify the functionality of a credit card validation API. It uses the BDD framework **Reqnroll (SpecFlow)** with **NUnit** as the test runner. The suite is integrated with **Allure Reports** and supports running inside **Docker** with **CI/CD** integration.
 
-# Application information 
+## 🚀 Technologies Used
 
-It’s an small microservice that validates provided Credit Card data and returns either an error or type of credit card application. 
+- .NET 8
+- Reqnroll (SpecFlow)
+- NUnit
+- Allure Report
+- WebApplicationFactory (for in-memory API testing)
+- Docker
+- GitHub Actions
+  
+## 📁 Project Structure
 
-# API Requirements 
+- CardValidation.Tests 
+  - IntegrationTests
+   - Features
+   - Hooks
+   - Steps
+  - UnitTests
+- /Reports  
+  - Allure reports
+  - Allure results
+- root:
+  - .ci.yml
+  - dockerfile
 
-API that validates credit card data. 
+### Prerequisites
 
-Input parameters: Card owner, Credit Card number, issue date and CVC. 
+- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)
+- [Docker](https://www.docker.com/)
 
-Logic should verify that all fields are provided, card owner does not have credit card information, credit card is not expired, number is valid for specified credit card type, CVC is valid for specified credit card type. 
+### Local Test Execution
 
-API should return credit card type in case of success: Master Card, Visa or American Express. 
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/qa-home-assignment.git
+   cd qa-assignment/CardValidation.Web
+   dotnet run
+   
+2. **Once api service is up and running, follow below commands to execute the script**:
+   ```bash
+   dotnet clean
+   dotnet build
+   dotnet test
 
-API should return all validation errors in case of failure. 
+3. **Generate Allure Report**:
+   ```bash
+   allure generate ./allure-results --clean -o ./allure-report
+   allure open ./allure-report
 
+4. **Code Coverage Report**:
+   ```bash
+   dotnet test --collect:"XPlat Code Coverage" --results-directory ./TestResults
+   reportgenerator -reports:"TestResults/*/coverage.cobertura.xml" -targetdir:"CoverageReport" -reporttypes:Html
+   open CoverageReport/index.html
 
-# Technical Requirements 
+5. **CI Integration**:
+   The tests are integrated with GitHub Actions. On every push or PR, tests run in Docker and generate Allure reports.
+   ```bash
+   📂 .github/workflows/ci.yml defines the CI pipeline.
+   
+### View Live Reports:
 
- - Write unit tests that covers 80% of application 
- - Write integration tests (preferably using Reqnroll framework) 
- - As a bonus: 
-    - Create a pipeline where unit tests and integration tests are running with help of Docker. 
-    - Produce tests execution results. 
-
-# Running the  application 
-
-1. Fork the repository
-2. Clone the repository on your local machine 
-3. Compile and Run application Visual Studio 2022.
+The latest build report is automatically generated and deployed to: **[View Live Report](https://faheem412.github.io/qa-home-assignment/)**
