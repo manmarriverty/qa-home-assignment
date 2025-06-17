@@ -3,7 +3,7 @@ using Reqnroll;
 using System.Linq;
 using System.Collections;
 
-namespace Hooks.Hooks 
+namespace CardValidation.Tests.Hooks 
 {
     [Binding]
     public class AllureNamingHooks
