@@ -1,0 +1,16 @@
+# Create .dockerignore in your project root
+cat > .dockerignore << EOF
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/TestResults/
+**/allure-results/
+**/coverage-results/
+**/.git/
+**/node_modules/
+**/npm-debug.log
+Dockerfile*
+README.md
+.gitignore
+EOF
