@@ -62,6 +62,7 @@ This project is a QA automation test suite built to verify the functionality of 
    ```bash
    📂 .github/workflows/ci.yml defines the CI pipeline.
    
+   
 ### View Live Reports:
 
 The latest build report is automatically generated and deployed to: **[View Live Report](https://faheem412.github.io/qa-home-assignment/)**
