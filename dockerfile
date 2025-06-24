@@ -9,26 +9,31 @@ COPY CardValidation.Web/CardValidation.Web.csproj CardValidation.Web/
 
 RUN dotnet restore CardValidation.sln
 COPY . .
+
+# Build the solution
+RUN dotnet build CardValidation.sln -c Release
+
+# Publish the web application
 RUN dotnet publish CardValidation.Web/CardValidation.Web.csproj -c Release -o /app/publish
 
-# --- Test stage ---
+# --- Test stage with verbose output ---
 FROM build AS test
 WORKDIR /src
 
-# Run tests and output Allure + coverage
-RUN dotnet test CardValidation.Tests/CardValidation.Tests.csproj \
-    --logger "trx;LogFileName=all-tests.trx" \
-    --results-directory /app/test-results \
-    /p:GenerateAllureResult=true \
-    /p:CollectCoverage=true \
-    /p:CoverletOutputFormat=cobertura \
-    /p:CoverletOutput=/app/test-results/coverage.xml
+RUN mkdir -p /app/test-results
 
-# Copy test and allure results
+# Run tests with detailed output - you'll see pass/fail in build output
+RUN dotnet test CardValidation.Tests/CardValidation.Tests.csproj -v detailed
+
 RUN mkdir -p /app/allure-results && \
-    cp -r /src/CardValidation.Tests/allure-results/* /app/allure-results || true
+    cp -r /src/CardValidation.Tests/allure-results/* /app/allure-results/ 2>/dev/null || true
 
-# --- Runtime stage (optional) ---
+# --- Interactive test stage (for manual testing) ---
+FROM build AS test-interactive
+WORKDIR /src
+CMD ["dotnet", "test", "CardValidation.Tests/CardValidation.Tests.csproj", "-v", "normal"]
+
+# --- Runtime stage ---
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
