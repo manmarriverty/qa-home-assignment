@@ -2,31 +2,36 @@
 using CardValidation.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CardValidation.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class CardValidationController : ControllerBase
+namespace CardValidation.Controllers
 {
-    private readonly ICardValidationService cardValidatior;
-
-    public CardValidationController(ICardValidationService cardValidationService)
+    [ApiController]
+    [Route("[controller]")]
+    public class CardValidationController : ControllerBase
     {
-        this.cardValidatior = cardValidationService;
-    }
+        private readonly ICardValidationService cardValidator;
 
-    [HttpPost]
-    [Route("card/credit/validate")]
-    public IActionResult ValidateCreditCard(CreditCard creditCard)
-    {
-        if (!ModelState.IsValid)
+        public CardValidationController(ICardValidationService cardValidationService)
         {
-            return BadRequest(ModelState);
+            cardValidator = cardValidationService;
         }
 
-        var result = cardValidatior.GetPaymentSystemType(creditCard.Number ?? string.Empty);        
+        [HttpPost("card/credit/validate")]
+        public IActionResult ValidateCreditCard([FromBody] CreditCard creditCard)
+        {
+            if (creditCard == null)
+                return BadRequest(new { Error = "Invalid credit card input." });
 
-        return Ok(result);
+            var result = cardValidator.ValidateCard(
+                creditCard.Owner,
+                creditCard.Number ?? string.Empty,
+                creditCard.IssueDate,
+                creditCard.Cvc
+            );
+
+            if (!result.IsValid)
+                return BadRequest(new { Errors = result.Errors });
+
+            return Ok(new { CardType = result.CardType?.ToString() });
+        }
     }
 }
-
