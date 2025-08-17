@@ -4,10 +4,17 @@ namespace CardValidation.Core.Services.Interfaces
 {
     public interface ICardValidationService
     {
-        bool ValidateOwner(string name);
+        // Individual validation methods
+        bool ValidateOwner(string owner);
+        bool ValidateNumber(string cardNumber);
         bool ValidateIssueDate(string issueDate);
-        bool ValidateCvc(string cvv);
-        bool ValidateNumber(string number);
-        PaymentSystemType GetPaymentSystemType(string number);
+        bool ValidateCvc(string cvc);
+
+        // Get card type
+        PaymentSystemType GetPaymentSystemType(string cardNumber);
+
+        // Full card validation
+        CardValidationResult ValidateCard(string owner, string cardNumber, string issueDate, string cvc);
     }
 }
+

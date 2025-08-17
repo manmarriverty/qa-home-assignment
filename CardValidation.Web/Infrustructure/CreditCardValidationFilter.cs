@@ -1,7 +1,7 @@
 ﻿using CardValidation.Core.Services.Interfaces;
 using CardValidation.ViewModels;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Text.Json;
+using System;
 
 namespace CardValidation.Infrustructure
 {
@@ -13,7 +13,7 @@ namespace CardValidation.Infrustructure
             => context.ModelState.AddModelError(parameterName, $"{parameterName} is required");
 
         private static void AddWrongParameterError(ActionExecutingContext context, string parameterName)
-             => context.ModelState.AddModelError(parameterName, $"Wrong {parameterName.ToLowerInvariant()}");
+            => context.ModelState.AddModelError(parameterName, $"Wrong {parameterName.ToLowerInvariant()}");
 
         public CreditCardValidationFilter(ICardValidationService cardValidationService)
         {
@@ -24,21 +24,20 @@ namespace CardValidation.Infrustructure
         {
             if (context.ActionArguments != null && context.ActionArguments.Count > 0)
             {
-                CreditCard? card;
                 if (context.ActionArguments.TryGetValue("creditCard", out object? value))
                 {
-                    card = value as CreditCard;
+                    var card = value as CreditCard;
 
                     if (card != null)
                     {
                         ValidateParameter(context, nameof(card.Owner), card.Owner, cardValidationService.ValidateOwner);
-                        ValidateParameter(context, nameof(card.Date), card.Date, cardValidationService.ValidateIssueDate);
-                        ValidateParameter(context, nameof(card.Cvv), card.Cvv, cardValidationService.ValidateCvc);
+                        ValidateParameter(context, nameof(card.IssueDate), card.IssueDate, cardValidationService.ValidateIssueDate);
+                        ValidateParameter(context, nameof(card.Cvc), card.Cvc, cardValidationService.ValidateCvc);
                         ValidateParameter(context, nameof(card.Number), card.Number, cardValidationService.ValidateNumber);
                     }
                     else
                     {
-                        throw new InvalidOperationException();
+                        throw new InvalidOperationException("CreditCard parameter is invalid.");
                     }
                 }
             }
@@ -46,18 +45,18 @@ namespace CardValidation.Infrustructure
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-
+            // No-op
         }
 
         private static void ValidateParameter(ActionExecutingContext context, string name, string? value, Func<string, bool> isParameterValid)
         {
-            if (value == null || value == string.Empty)
+            if (string.IsNullOrEmpty(value))
             {
                 AddParameterIsRequiredError(context, name);
             }
-            else
+            else if (!isParameterValid(value))
             {
-                if (!isParameterValid(value)) { AddWrongParameterError(context, name); }
+                AddWrongParameterError(context, name);
             }
         }
     }

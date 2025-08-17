@@ -1,0 +1,36 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, feature/card-validation-tests ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Debug
+
+      - name: Run tests
+        run: dotnet test --no-build --logger 
+"trx;LogFileName=TestResults.trx"
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestResults
+          path: '**/TestResults.trx'
+

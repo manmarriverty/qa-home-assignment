@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0
+WORKDIR /src
+
+COPY *.sln .
+COPY CardValidation.Core/*.csproj CardValidation.Core/
+COPY CardValidation.Core.Tests/*.csproj CardValidation.Core.Tests/
+COPY CardValidation.Web/*.csproj CardValidation.Web/
+COPY CardValidation.Web.Tests/*.csproj CardValidation.Web.Tests/
+COPY CardValidation.IntegrationTests/*.csproj 
+CardValidation.IntegrationTests/
+RUN dotnet restore
+
+COPY . .
+
+# Run all tests
+CMD ["dotnet", "test", "--logger:trx"]
+

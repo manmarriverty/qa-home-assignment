@@ -21,6 +21,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/health", () => Results.Ok("Healthy"));
+
 app.Run();
 
 void ConfigureServices(IServiceCollection services)
