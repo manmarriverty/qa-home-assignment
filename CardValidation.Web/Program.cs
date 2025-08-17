@@ -33,6 +33,8 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddMvc(options =>
     {
-        options.Filters.Add(typeof(CreditCardValidationFilter)); ;
+        options.Filters.Add(typeof(CreditCardValidationFilter));
     });
 }
+
+public partial class Program { }
