@@ -6,7 +6,6 @@ services:
       dockerfile: CardValidation.Web/Dockerfile
     ports:
       - "5135:8080"
-    profiles: ["web"]
 
   unit-tests:
     build:
