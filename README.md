@@ -15,7 +15,7 @@ Most of missing coverage comes from Program.cs, which is not a subject to unit t
 
 # Integration testing
 
-Integration testing done with ReqnRoll framework and xUnit (chosen since CardValidation.Tests.Unit already uses it)
+Integration testing done with ReqnRoll framework and xUnit (chosen since CardValidation.Tests.Unit already uses it).
 
 There is one smoke test, which defines a valid path with next card data:
 - Owner: John Doe
@@ -46,7 +46,7 @@ return DateTime.UtcNow < expiryDate;
 ```
 We are checking against a first day of a month for expiry date, but it should be the first day of the next month.
 Cards usually have "valid thru" date, which means the card is valid until the end of the month, not the beginning.
-*For example, if it says 12/26, the debit card will expire on the last day of December 2026 (i.e., December 31st, 2026).* (https://fi.money/guides/debit-cards/debit-card-expiry-reasons-for-expiry-renewal-process-online)
+*For example, if it says 12/26, the debit card will expire on the last day of December 2026 (i.e., December 31st, 2026).* (https://fi.money/guides/debit-cards/debit-card-expiry-reasons-for-expiry-renewal-process-online).
 Test `ValidateIssueDate_CurrentMonth_ReturnsTrue` is currently skipped, but must be enabled if a bug is actually present after the fix is applied.
 
 Also worth mentioning that valid thru date is not connected to UTC time or basically any timezone, it is a expiry date and can differ based on issuing country or institution.
@@ -60,12 +60,12 @@ var issueDateTime = new DateTime(year / 1000 > 0 ? year : 2000 + year, month, 1)
 ```
 
 - If possible, ask the development team to use IDateTimeProvider abstraction to allow injecting needed datetime in tests (see https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices
-*Handle stub static references with seams* section).
+*Handle stub static references with seams* section)
 This will help with tests connected to date validation as currently date calculation logic is handled on a test side, which is not considered a best practice:
 ```csharp
 var nextMonth = DateTime.UtcNow.AddMonths(1).ToString("MM\\/yyyy");
 ```
-Overall, nice to have, but not critical. Also in case IDateTimeProvider is added, could use `[Theory]` instead of `[Fact]` for this method tests to cover more cases via single test.
+Overall, nice to have, but not critical. Also in case IDateTimeProvider is added, could use `[Theory]` instead of `[Fact]` for this method tests to cover more cases via single test description.
 
 
 ### ValidateOwner method in CardValidationService.cs
@@ -84,6 +84,25 @@ This would lower the load on card processing service, and limit the amount of in
 ## Misc
 
 - Typo in Infrustructure folder name, should be Infrastructure.
+
+# Running tests locally
+
+- Unit tests can be run separately via `dotnet test CardValidation.Tests.Unit/CardValidation.Tests.Unit.csproj` command or via your IDE
+- Integration tests require application to run on your machine on port 5135 via current setup. Alternative is to set WEBAPP_URL environment variable if tested against remote machine
+- After that tests can be run separately via `dotnet test CardValidation.Tests.Integration/CardValidation.Tests.Integration.csproj` command or via your IDE
+
+# Running tests via Docker
+
+- To run tests via Docker, you need to have Docker installed and running on your machine
+- You can use the provided `docker-compose.yml` file to run the tests in a containerized environment
+- To run the tests, execute the following command in the root directory of the project:
+```bash
+docker compose run --rm unit-tests
+```
+```bash
+docker compose up --build --abort-on-container-exit integration-tests web
+```
+- After you run tests, the results will be available in the `TestResults` directory in the corresponding project
 
 # Home Assignment
 

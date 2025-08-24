@@ -21,10 +21,12 @@ namespace CardValidation.Tests.Integration.StepDefinitions
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             };
+            
+            var baseUrl = Environment.GetEnvironmentVariable("WEBAPP_URL") ?? "http://localhost:5135";
 
             _client = new HttpClient(handler)
             {
-                BaseAddress = new Uri("https://localhost:7135"),
+                BaseAddress = new Uri(baseUrl),
                 Timeout = TimeSpan.FromSeconds(5)
             };
         }
