@@ -1,17 +1,29 @@
 # Unit tests
 
-For a given project unit testing is required for this class:
+For a given project unit testing is required for this classes:
 - CardValidation.Core/Services/CardValidationService.cs - full cover with unit tests
 - CardValidation.Web/Infrustructure/CreditCardValidationFilter.cs - only behavior of filter
 - CardValidation.Web/Controllers/CardValidationController.cs - only behavior of controller
 
-Files not to be tested:
+Files not to be tested via unit tests:
 - CardValidation.Core/Enums/PaymentSystemType.cs - no logic
 - CardValidation.Web/ViewModels/CreditCard.cs - no logic
 - CardValidation.Web/Program.cs - bad practice to test Program.cs, no use
 
 Achieved coverage is 91% for given project, which is above the 80% requirement.
 Most of missing coverage comes from Program.cs, which is not a subject to unit testing.
+
+# Integration testing
+
+Integration testing done with ReqnRoll framework and xUnit (chosen since CardValidation.Tests.Unit already uses it)
+
+There is one smoke test, which defines a valid path with next card data:
+- Owner: John Doe
+- Number: 4242424242424242
+- Date: validDate (current month + 2 months)
+- CVC: 111
+
+If at any point this test fails, most of integration test suite is likely to fail.
 
 # Found issues
 
@@ -48,7 +60,7 @@ var issueDateTime = new DateTime(year / 1000 > 0 ? year : 2000 + year, month, 1)
 ```
 
 - If possible, ask the development team to use IDateTimeProvider abstraction to allow injecting needed datetime in tests (see https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices
-*Handle stub static references with seams* reference).
+*Handle stub static references with seams* section).
 This will help with tests connected to date validation as currently date calculation logic is handled on a test side, which is not considered a best practice:
 ```csharp
 var nextMonth = DateTime.UtcNow.AddMonths(1).ToString("MM\\/yyyy");
@@ -62,12 +74,12 @@ Overall, nice to have, but not critical. Also in case IDateTimeProvider is added
 ```csharp
 ^((?:[A-Za-z]+ ?){1,3})$
 ```
-However the single leading space or multiple trailing spaces are not allowed. Probably not a major issue, but might be worth discussing with the team.
+However the single/multiple leading space or multiple trailing spaces are not allowed. Probably not a major issue, but might be worth discussing with the team.
 
 ### ValidateNumber method in CardValidationService.cs
 
-- All validation checks (against Visa, Mastercard and American Express) are for regex format only, consider adding a check for Luhn validity on backend https://en.wikipedia.org/wiki/Luhn_algorithm.
-This would lower the load on card processing service, when incorrect card number lands on it.
+- All validation checks (against Visa, Mastercard and American Express) are for regex format only, should consider adding a check for Luhn validity on backend https://en.wikipedia.org/wiki/Luhn_algorithm.
+This would lower the load on card processing service, and limit the amount of incorrect card validations.
 
 ## Misc
 
