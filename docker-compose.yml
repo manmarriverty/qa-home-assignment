@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: CardValidation.Web/Dockerfile
+    ports:
+      - "5135:8080"
+
+  unit-tests:
+    build:
+      context: .
+      dockerfile: CardValidation.Tests.Unit/Dockerfile
+    depends_on: []
+    volumes:
+      - ./CardValidation.Tests.Unit/TestResults:/tests/CardValidation.Tests.Unit/TestResults
+
+  integration-tests:
+    build:
+      context: .
+      dockerfile: CardValidation.Tests.Integration/Dockerfile
+    depends_on:
+      - web
+    environment:
+      - WEBAPP_URL=http://web:8080
+    volumes:
+      - ./CardValidation.Tests.Integration/TestResults:/tests/CardValidation.Tests.Integration/TestResults
