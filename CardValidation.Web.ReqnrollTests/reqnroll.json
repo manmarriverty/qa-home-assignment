@@ -1,0 +1,6 @@
+{
+  "unitTestProvider": {
+    "name": "xunit"
+  },
+  "stepAssemblies": []
+}

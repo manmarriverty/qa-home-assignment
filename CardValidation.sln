@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32002.261
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardValidation.Web", "CardValidation.Web\CardValidation.Web.csproj", "{B6992121-A357-4F08-8C8A-A2CA47424600}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardValidation.Core", "CardValidation.Core\CardValidation.Core.csproj", "{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardValidation.Core.Tests", "CardValidation.Core.Tests\CardValidation.Core.Tests.csproj", "{FE04878D-F405-4C4F-8684-5F657D54A0E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardValidation.Web.IntegrationTests", "CardValidation.Web.IntegrationTests\CardValidation.Web.IntegrationTests.csproj", "{1E1D478D-AE15-4CB7-93B8-1F4D14E6F5F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardValidation.Web.ReqnrollTests", "CardValidation.Web.ReqnrollTests\CardValidation.Web.ReqnrollTests.csproj", "{CE96B428-BCB8-43F2-8301-7AE2B521A63A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE04878D-F405-4C4F-8684-5F657D54A0E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE04878D-F405-4C4F-8684-5F657D54A0E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE04878D-F405-4C4F-8684-5F657D54A0E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE04878D-F405-4C4F-8684-5F657D54A0E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1D478D-AE15-4CB7-93B8-1F4D14E6F5F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1D478D-AE15-4CB7-93B8-1F4D14E6F5F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1D478D-AE15-4CB7-93B8-1F4D14E6F5F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1D478D-AE15-4CB7-93B8-1F4D14E6F5F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE96B428-BCB8-43F2-8301-7AE2B521A63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE96B428-BCB8-43F2-8301-7AE2B521A63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE96B428-BCB8-43F2-8301-7AE2B521A63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE96B428-BCB8-43F2-8301-7AE2B521A63A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

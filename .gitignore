@@ -398,3 +398,18 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# --- Project-specific ignores (tests & coverage) ---
+# Test results from any framework
+[Tt]est[Rr]esults/
+**/TestResults/
+*.trx
+
+# Coverage outputs (local or Docker)
+coverage-report/
+**/coverage.cobertura.xml
+**/coverage.opencover.xml
+**/lcov.info
+
+# OS miscellany
+desktop.ini

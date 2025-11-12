@@ -1,0 +1,25 @@
+# Runs all tests (unit + Reqnroll) and produces coverage (HTML) + TRX results
+FROM mcr.microsoft.com/dotnet/sdk:9.0
+
+# ReportGenerator for pretty HTML and Cobertura/OpenCover merge
+RUN dotnet tool install --global dotnet-reportgenerator-globaltool
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Work in /src and copy the whole solution
+WORKDIR /src
+COPY . ./
+
+# Restore first (enables layer caching)
+RUN dotnet restore
+
+# Run tests + collect coverage + export TRX + build merged HTML report
+# - uses coverage.runsettings in solution root
+# - -sourcedirs:/src fixes "File ... does not exist" warnings
+# - cp -n avoids overwriting duplicate TRX names
+RUN dotnet test . -c Debug --settings "./coverage.runsettings" --collect:"XPlat Code Coverage" --logger "trx;LogFileName=test-results.trx" \
+ && mkdir -p /artifacts/coverage-report /artifacts/trx \
+ && reportgenerator -reports:"**/TestResults/**/coverage.cobertura.xml" -targetdir:"/artifacts/coverage-report" -reporttypes:"Html;HtmlSummary;TextSummary" -sourcedirs:/src \
+ && find . -path "*/TestResults/*" -name "*.trx" -exec cp -n {} /artifacts/trx/ \; || true
+
+# Helpful message + directory listing when the container runs
+CMD [ "bash", "-lc", "echo 'Artifacts are in /artifacts. Coverage HTML: /artifacts/coverage-report/index.html'; ls -R /artifacts" ]
