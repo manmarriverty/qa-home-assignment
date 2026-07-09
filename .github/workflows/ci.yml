@@ -19,24 +19,24 @@ jobs:
         dotnet-version: '8.0.x'
     
     - name: Restore dependencies
-      run: dotnet restore
-    
+      run: dotnet restore CardValidation.sln
+
     - name: Build
-      run: dotnet build --no-restore
-    
-    - name: Run Integration Tests
-      run: dotnet test CardValidation.IntegrationTests/CardValidation.IntegrationTests.csproj --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory:./TestResults/Integration
-      continue-on-error: true
-    
+      run: dotnet build CardValidation.sln --no-restore
+
     - name: Run Unit Tests
-      run: dotnet test CardValidation.Core.Tests/CardValidation.Core.Tests.csproj --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory:./TestResults/Unit
-      continue-on-error: true
+      run: dotnet test CardValidation.Core.Tests/CardValidation.Core.Tests.csproj --no-build --verbosity normal --logger "trx;LogFileName=unit-tests.trx" --collect:"XPlat Code Coverage" --results-directory:./TestResults/Unit
+
+    - name: Run Integration Tests
+      run: dotnet test CardValidation.IntegrationTests/CardValidation.IntegrationTests.csproj --no-build --verbosity normal --logger "trx;LogFileName=integration-tests.trx" --results-directory:./TestResults/Integration
     
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        files: TestResults/Unit/**/*.trx
+        files: |
+          TestResults/Unit/**/*.trx
+          TestResults/Integration/**/*.trx
     
     - name: Upload Coverage Reports
       uses: actions/upload-artifact@v4

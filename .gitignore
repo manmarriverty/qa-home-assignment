@@ -398,8 +398,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-# QA Assignment Answer Keys (for interviewers only)
-TEST_TRAPS.md
-BUGS_TO_FIND.md
-IMPLEMENTATION_PLAN.md

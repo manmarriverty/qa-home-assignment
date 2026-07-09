@@ -5,6 +5,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+COPY ["NuGet.Config", "./"]
 COPY ["CardValidation.Web/CardValidation.Web.csproj", "CardValidation.Web/"]
 COPY ["CardValidation.Core/CardValidation.Core.csproj", "CardValidation.Core/"]
 RUN dotnet restore "CardValidation.Web/CardValidation.Web.csproj"
