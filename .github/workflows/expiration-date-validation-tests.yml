@@ -1,0 +1,118 @@
+name: Test Suite - Expiration Date Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Run Unit Tests - Expiration Date Validation
+      run: dotnet test CardValidation.Core.Tests/CardValidation.Core.Tests.csproj --no-build --verbosity normal --configuration Release --logger "trx;LogFileName=unit-tests-results.trx" --collect:"XPlat Code Coverage"
+    
+    - name: Upload Unit Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: unit-test-results
+        path: |
+          **/TestResults/**/*.trx
+          **/TestResults/**/coverage.cobertura.xml
+    
+    - name: Test Report
+      if: always()
+      uses: dorny/test-reporter@v1
+      with:
+        name: Unit Tests Report
+        path: '**/TestResults/**/*.trx'
+        reporter: 'dotnet-trx'
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Run Integration Tests - Expiration Date Validation
+      run: dotnet test CardValidation.IntegrationTests/CardValidation.IntegrationTests.csproj --no-build --verbosity normal --configuration Release --logger "trx;LogFileName=integration-tests-results.trx" --collect:"XPlat Code Coverage"
+    
+    - name: Upload Integration Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-test-results
+        path: |
+          **/TestResults/**/*.trx
+          **/TestResults/**/coverage.cobertura.xml
+    
+    - name: Test Report
+      if: always()
+      uses: dorny/test-reporter@v1
+      with:
+        name: Integration Tests Report
+        path: '**/TestResults/**/*.trx'
+        reporter: 'dotnet-trx'
+
+  code-coverage:
+    name: Code Coverage Report
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests]
+    if: always()
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download Coverage Reports
+      uses: actions/download-artifact@v4
+      with:
+        path: coverage-reports
+    
+    - name: Generate Coverage Badge
+      run: |
+        echo "Coverage reports downloaded and ready for analysis"
+        find coverage-reports -name "coverage.cobertura.xml" -exec echo "Found: {}" \;
+
+  all-tests:
+    name: All Tests Status
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests]
+    if: always()
+    
+    steps:
+    - name: Check Test Status
+      run: |
+        if [ "${{ needs.unit-tests.result }}" != "success" ] || [ "${{ needs.integration-tests.result }}" != "success" ]; then
+          echo "❌ Some tests failed"
+          exit 1
+        fi
+        echo "✅ All tests passed"
