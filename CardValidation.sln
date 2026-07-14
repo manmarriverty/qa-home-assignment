@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardValidation.Web", "CardV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardValidation.Core", "CardValidation.Core\CardValidation.Core.csproj", "{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardValidation.Core.Tests", "CardValidation.Core.Tests\CardValidation.Core.Tests.csproj", "{E1A1B2C3-D4E5-4F6A-8B9C-0D1E2F3A4B5C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardValidation.IntegrationTests", "CardValidation.IntegrationTests\CardValidation.IntegrationTests.csproj", "{F2B2C3D4-E5F6-4A7B-9C0D-1E2F3A4B5C6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9D8878E-3213-49FB-83E2-5A9B40EF0B42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1A1B2C3-D4E5-4F6A-8B9C-0D1E2F3A4B5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1A1B2C3-D4E5-4F6A-8B9C-0D1E2F3A4B5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1A1B2C3-D4E5-4F6A-8B9C-0D1E2F3A4B5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1A1B2C3-D4E5-4F6A-8B9C-0D1E2F3A4B5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2B2C3D4-E5F6-4A7B-9C0D-1E2F3A4B5C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2B2C3D4-E5F6-4A7B-9C0D-1E2F3A4B5C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2B2C3D4-E5F6-4A7B-9C0D-1E2F3A4B5C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2B2C3D4-E5F6-4A7B-9C0D-1E2F3A4B5C6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
